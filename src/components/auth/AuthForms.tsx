@@ -1,13 +1,16 @@
 "use client"
 
 import Link from "next/link"
+import { useState } from "react"
 import { signIn } from "next-auth/react";
 import { Checkbox } from "@/components/ui/checkbox"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import Image from 'next/image'
+import { Loader } from "lucide-react"
 
 export default function AuthPage() {
+  const [isLoading, setIsLoading] = useState(false)
 
   async function login(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -18,13 +21,17 @@ export default function AuthPage() {
       password: formData.get("password")
     };
 
-    console.log(data)
-
-    // Aqui, fazemos o login
-    await signIn("credentials", {
-      ...data,
-      callbackUrl: "/app"
-    });
+    try {
+      setIsLoading(true)
+      await signIn("credentials", {
+        ...data,
+        callbackUrl: "/app"
+      });
+    } catch (error) {
+      console.error("Erro no login:", error)
+    } finally {
+      setIsLoading(false)
+    }
   }
 
   return (
@@ -33,7 +40,9 @@ export default function AuthPage() {
         <form onSubmit={login}>
           <div className="w-full max-w-md space-y-6">
             <Button
+              type="button"
               variant="outline"
+              disabled={isLoading}
               className="flex w-full items-center justify-center gap-2 rounded-md border border-gray-300 p-6 text-base font-medium"
             >
               <Image
@@ -57,7 +66,14 @@ export default function AuthPage() {
                 <label htmlFor="email" className="block text-sm font-medium text-gray-700">
                   Email
                 </label>
-                <Input id="email" type="email" name="email" placeholder="nome@email.com" className="w-full rounded-md border border-gray-300 p-4" />
+                <Input 
+                  id="email" 
+                  type="email" 
+                  name="email" 
+                  disabled={isLoading}
+                  placeholder="nome@email.com" 
+                  className="w-full rounded-md border border-gray-300 p-4" 
+                />
               </div>
 
               <div className="space-y-2">
@@ -69,11 +85,20 @@ export default function AuthPage() {
                     Esqueceu a senha?
                   </Link>
                 </div>
-                <Input id="password" type="password" name="password" className="w-full rounded-md border border-gray-300 p-4" />
+                <Input 
+                  id="password" 
+                  type="password" 
+                  name="password" 
+                  disabled={isLoading}
+                  className="w-full rounded-md border border-gray-300 p-4" 
+                />
               </div>
 
               <div className="flex items-center space-x-2">
-                <Checkbox id="remember" />
+                <Checkbox 
+                  id="remember" 
+                  disabled={isLoading}
+                />
                 <label
                   htmlFor="remember"
                   className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
@@ -82,23 +107,30 @@ export default function AuthPage() {
                 </label>
               </div>
 
-              <Button className="w-full rounded-md bg-emerald-400 p-6 text-base font-medium text-white hover:bg-emerald-500"
+              <Button 
+                className="w-full rounded-md bg-emerald-400 p-6 text-base font-medium text-white hover:bg-emerald-500"
                 type="submit"
+                disabled={isLoading}
               >
-                Log In
+                {isLoading ? (
+                  <>
+                    <Loader className="mr-2 h-4 w-4 animate-spin" />
+                    Carregando...
+                  </>
+                ) : (
+                  "Log In"
+                )}
               </Button>
             </div>
 
-            {/* <div className="text-center text-sm">
-          <Link href="#" className="text-gray-800 hover:underline">
-            Haven&apos;t received the confirmation email yet?
-          </Link>
-        </div> */}
+            <div className="text-center text-sm">
+              <Link href="/signup" className="text-gray-800 hover:underline">
+                Não tem conta? Vamos criar uma já!
+              </Link>
+            </div>
           </div>
         </form>
       </div>
     </div>
-
   )
 }
-

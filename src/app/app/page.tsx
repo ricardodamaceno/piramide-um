@@ -11,10 +11,12 @@ export default async function Page() {
   }
 
   return (
-    <div>
-        <div>Logado.</div>
+    <div className="min-h-screen flex items-center justify-center">
+      <div className="flex flex-col items-center space-y-4">
+        <h1>Logado!</h1>
         <h1>Olá, {session?.user?.name}</h1>
-        <div className="my-4"><LogoutButton/></div>
+        <div className="my-4"><LogoutButton /></div>
+      </div>
     </div>
   );
 }
