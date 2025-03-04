@@ -11,7 +11,7 @@ export async function signup(userData: SignupData) {
     const baseURL = process.env.BASE_URL;
 
     try {
-        const response = await axios.post(
+        await axios.post(
             `${baseURL}/api/Auth/register`,
             userData,
             {

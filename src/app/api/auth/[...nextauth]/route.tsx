@@ -14,7 +14,7 @@ const handler = NextAuth({
         email: {},
         password: {}
       },
-      async authorize(credentials, req) {
+      async authorize(credentials) {
         if (!credentials) {
           return null
         }
@@ -48,7 +48,7 @@ const handler = NextAuth({
             id: "1",
             name: authData.user,
           };
-        } catch (e) {
+        } catch {
           return null;
         }
       }
