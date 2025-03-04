@@ -12,7 +12,7 @@ export default function Home() {
         <div>
         <Button
           className="my-4" 
-          onClick={() => router.push('/auth')}>
+          onClick={() => router.push('/auth')} >
           Login
         </Button>
         </div>
