@@ -1,7 +1,7 @@
 export default function Home() {
   return (
     <main>
-      Landing page
+      Bem-vindo ao meu projeto!
     </main>
   );
 }
